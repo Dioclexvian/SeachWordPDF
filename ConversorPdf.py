@@ -1,22 +1,21 @@
 import os
-import PyPDF2
+from pypdf import PdfReader
 
 def search_for_text_in_pdf(file_path, text_to_search):
-    pdf_file_obj = open(file_path, 'rb')
-    pdf_reader = PyPDF2.PdfFileReader(pdf_file_obj)
-    num_pages = pdf_reader.numPages
+    pdf_reader = PdfReader(file_path)
+    num_pages = len(pdf_reader.pages)
 
     for page_num in range(num_pages):
-        page_obj = pdf_reader.getPage(page_num)
-        text_in_page = page_obj.extract_text()
+        page = pdf_reader.pages[page_num]
+        text_in_page = page.extract_text()
         if text_to_search in text_in_page:
             return True
 
     return False
 
-# Uso de la función
-dir_path = 'sourceFiles'
-text_to_search = 'Moya Chaves'
+
+dir_path = 'dir/donde/están/losPdf'
+text_to_search = 'Palabra a buscar'
 
 for file_name in os.listdir(dir_path):
     if file_name.endswith('.pdf'):
